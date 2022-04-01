@@ -7,6 +7,7 @@ const getParseFile = (value) => {
     try {
         const { name, ext, dir } = parse(value);
         return [[slugify(name), ext].join(''), dir];
+        //slugify(name)ext, dir
     } catch(err) {
         throw new TypeError("Invalid filename argument")
     }
