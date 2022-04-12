@@ -2,7 +2,6 @@ const { parse, join } = require("path");
 const { existsSync, accessSync, writeFileSync, constants: { W_OK } } = require("fs");
 const { slugify } = require("../helpers");
 
-
 const getParseFile = (value) => {
     try {
         const { name, ext, dir } = parse(value);
@@ -11,7 +10,6 @@ const getParseFile = (value) => {
         throw new TypeError("Invalid filename argument")
     }
 }
-
 const hasWriteAccess = (path) => {
     let has = true;
     try {
