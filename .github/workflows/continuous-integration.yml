@@ -2,45 +2,47 @@ name: File Write Continuos Integration
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   code_quality:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Code Quality
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14.x
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run lint
+      - uses: actions/checkout@v3
+      - name: Code Quality
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+          cache: "npm"
+      - run: npm ci
+      - run: npm run lint
   audit:
+    needs: code_quality
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Audit Report
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14.x
-        cache: 'npm'
-    - run: npm ci
-    - run: npm audit --audit-level=critical
+      - uses: actions/checkout@v3
+      - name: Audit Report
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+          cache: "npm"
+      - run: npm ci
+      - run: npm audit --audit-level=critical
   unit_test:
+    needs: audit
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
         node-version: [14.x]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run test:ci
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm ci
+      - run: npm run test:ci
