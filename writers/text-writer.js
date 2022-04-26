@@ -1,5 +1,10 @@
 const { parse, join } = require("path");
-const { existsSync } = require("fs");
+const {
+  existsSync,
+  accessSync,
+  writeFileSync,
+  constants: { W_OK },
+} = require("fs");
 const { slugify } = require("../helpers");
 const { hasWriteAccess, writeFile } = require("../helpers/file-helper");
 
