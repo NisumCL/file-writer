@@ -1,11 +1,10 @@
 const { parse, join } = require("path");
-const {
-  existsSync,
-  accessSync,
-  writeFileSync,
-  constants: { W_OK },
-} = require("fs");
-const { slugify } = require("../helpers");
+const { existsSync } = require("fs");
+const { slugify, hasWriteAccess, writeFile } = require("../helpers");
+
+//tarea, eliminar funciones (has and writeFile, ya lo hice) importarlas(ok),
+//y luego hacer que corran los test unitarios, de acuerdo al proceso de importar.
+//test deberían simplificarse. Cada una hacer que le corra.
 
 const getParseFile = (value) => {
   try {
@@ -14,25 +13,6 @@ const getParseFile = (value) => {
   } catch (err) {
     throw new TypeError("Invalid filename argument");
   }
-};
-const hasWriteAccess = (path) => {
-  let has = true;
-  try {
-    accessSync(path, W_OK);
-  } catch (err) {
-    has = false;
-  }
-  return has;
-};
-
-const writeFile = (filename, data) => {
-  let result = true;
-  try {
-    writeFileSync(filename, data);
-  } catch {
-    result = false;
-  }
-  return result;
 };
 
 const textWriter = (filename, data) => {
