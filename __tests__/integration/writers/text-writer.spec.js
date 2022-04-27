@@ -1,3 +1,4 @@
+const { chmodSync } = require("fs");
 const { textWriter } = require("../../../writers");
 const { clearTestFolder, createTestFolder } = require("../../tools");
 const path = require("path");
@@ -24,12 +25,10 @@ it("Should throw an errot when given an invalid path or doesn't exists", () => {
   }).toThrowError("Invalid path argument");
 });
 
-it("Should throw an error when it don't have write permissions on the given path", () => {
+it.skip("Should throw an error when it don't have write permissions on the given path", () => {
+  chmodSync(testFolder, parseInt("400", 8));
   expect(() => {
-    textWriter(
-      "__tests__/fixtures/root-permissions/new file.txt",
-      "Hello world!"
-    );
+    textWriter(filename, "Hello world!");
   }).toThrowError("It doesn't have write permissions");
 });
 
