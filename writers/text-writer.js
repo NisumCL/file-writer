@@ -1,12 +1,6 @@
 const { parse, join } = require("path");
-const {
-  existsSync,
-  accessSync,
-  writeFileSync,
-  constants: { W_OK },
-} = require("fs");
-const { slugify } = require("../helpers");
-const { hasWriteAccess, writeFile } = require("../helpers/file-helper");
+const { existsSync } = require("fs");
+const { slugify, hasWriteAccess, writeFile } = require("../helpers");
 
 //tarea, eliminar funciones (has and writeFile, ya lo hice) importarlas(ok),
 //y luego hacer que corran los test unitarios, de acuerdo al proceso de importar.
