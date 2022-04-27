@@ -8,23 +8,23 @@ on:
 
 jobs:
   code_quality:
+    name: Code Quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Code Quality
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14.x
           cache: "npm"
       - run: npm ci
       - run: npm run lint
   audit:
+    name: Audit Report
     needs: code_quality
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Audit Report
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14.x
           cache: "npm"
@@ -32,6 +32,7 @@ jobs:
       - run: npm audit --audit-level=critical
   unit_test:
     needs: audit
+    name: Unit Tests Node:${{ matrix.node-version }} OS:${{ matrix.os }}
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
@@ -39,10 +40,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm ci
       - run: npm run test:ci
+  integration_test:
+    needs: unit_test
+    name: Integration Tests Node:${{ matrix.node-version }} OS:${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        node-version: [14.x]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm ci
+      - run: npm run test:integration
